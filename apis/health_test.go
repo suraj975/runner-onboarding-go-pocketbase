@@ -12,6 +12,16 @@ func TestHealthAPI(t *testing.T) {
 
 	scenarios := []tests.ApiScenario{
 		{
+			Name:           "POST health status uses the not-found fallback",
+			Method:         http.MethodPost,
+			URL:            "/api/health",
+			ExpectedStatus: http.StatusNotFound,
+			ExpectedContent: []string{
+				`"status":404`,
+			},
+			ExpectedEvents: map[string]int{"*": 0},
+		},
+		{
 			Name:           "GET health status (guest)",
 			Method:         http.MethodGet, // automatically matches also HEAD as a side-effect of the Go std mux
 			URL:            "/api/health",
